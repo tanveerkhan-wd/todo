@@ -6,3 +6,18 @@ linter:
     prefer_const_declarations: true
     avoid_print: true
     require_trailing_commas: true
+    sort_child_properties_last: true
+    use_key_in_widget_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    annotate_overrides: true
+    avoid_unnecessary_containers: true
+    prefer_single_quotes: true
+    unnecessary_const: true
+    use_super_parameters: true
+    prefer_final_locals: true
+    avoid_types_on_closure_parameters: true
+
+# For production builds, set to error level.
+# analyzer:
+#   errors:
+#     require_trailing_commas: ignore

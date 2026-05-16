@@ -13,8 +13,8 @@
     },
     "linking_enabled": false
   },
-  "out_dir_shared": "C:\\projects\\flutter\\todo_offline\\.dart_tool\\hooks_runner\\shared\\objective_c\\build\\",
-  "out_file": "C:\\projects\\flutter\\todo_offline\\.dart_tool\\hooks_runner\\objective_c\\8e04c28b44\\output.json",
+  "out_dir_shared": "C:\\projects\\flutter\\todo\\.dart_tool\\hooks_runner\\shared\\objective_c\\build\\",
+  "out_file": "C:\\projects\\flutter\\todo\\.dart_tool\\hooks_runner\\objective_c\\8e04c28b44\\output.json",
   "package_name": "objective_c",
   "package_root": "C:\\Users\\codew\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\objective_c-9.3.0\\",
   "user_defines": {}
