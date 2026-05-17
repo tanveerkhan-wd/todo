@@ -40,8 +40,9 @@ class TodoReminder {
   String get label {
     if (minutesBefore == 0) return 'At due time';
     if (minutesBefore < 60) return '$minutesBefore min';
-    if (minutesBefore < 1440)
+    if (minutesBefore < 1440) {
       return '${minutesBefore ~/ 60} hour${minutesBefore >= 120 ? "s" : ""}';
+    }
     final days = minutesBefore ~/ 1440;
     return '$days day${days > 1 ? "s" : ""}';
   }

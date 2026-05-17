@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:todo_offline/app.dart';
 
 /// Helper that pumps the full [TodoApp] wrapped in a test [ProviderScope].
@@ -26,8 +27,12 @@ void main() {
       expect(find.byType(TextField), findsAtLeast(2));
     });
 
-    testWidgets('shows segmented filter buttons', (tester) async {
+    testWidgets('shows segmented filter buttons in drawer', (tester) async {
       await pumpApp(tester);
+      // Open the drawer to reveal filters
+      await tester.tap(find.byTooltip('Menu'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
       expect(find.text('All'), findsOneWidget);
       expect(find.text('Today'), findsOneWidget);
       expect(find.text('Upcoming'), findsOneWidget);
@@ -52,9 +57,8 @@ void main() {
       await tester.enterText(quickAddField, 'New test task');
       await tester.pump();
 
-      // Tap the send button (the last IconButton in the bottom bar)
-      final iconButtons = find.byType(IconButton);
-      await tester.tap(iconButtons.last);
+      // Tap the send button
+      await tester.tap(find.byIcon(FontAwesomeIcons.solidPaperPlane));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 
@@ -85,19 +89,12 @@ void main() {
       final textFields = find.byType(TextField);
       await tester.enterText(textFields.last, 'Delete me');
       await tester.pump();
-      await tester.tap(find.byType(IconButton).last);
+      await tester.tap(find.byIcon(FontAwesomeIcons.solidPaperPlane));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 
-      // Find the overflow menu on the task
-      await tester.tap(find.byTooltip('More actions').first);
-      // Pump multiple frames to animate the popup menu open
-      for (int i = 0; i < 5; i++) {
-        await tester.pump(const Duration(milliseconds: 50));
-      }
-
-      // Tap delete
-      await tester.tap(find.text('Delete').last);
+      // Find the delete icon button on the task
+      await tester.tap(find.byTooltip('Delete task').first);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 

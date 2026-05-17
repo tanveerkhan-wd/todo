@@ -1,39 +1,18 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/todo.dart';
 import '../models/todo_list.dart';
 import '../models/saved_filter.dart';
 
-/// Central file-based persistence with atomic writes and automatic backup.
+/// Simplified local storage using SharedPreferences.
+/// This avoids file system locking and permission issues across platforms.
 ///
-/// File layout (app documents directory):
-///   - `todos.json`         – primary todo data (JSON array)
-///   - `lists.json`         – project/list definitions
-///   - `saved_filters.json` – filter presets
+/// // TODO: Consider adding encryption for sensitive task data in future phases.
 class PersistenceService {
-  static const String _todosFile = 'todos.json';
-  static const String _todosBackupFile = 'todos_backup.json';
-  static const String _listsFile = 'lists.json';
-  static const String _filtersFile = 'saved_filters.json';
-  static const String _tempSuffix = '.tmp';
-
-  final String? _overridePath;
-
-  PersistenceService({String? overridePath}) : _overridePath = overridePath;
-
-  Future<String> get _basePath async {
-    if (_overridePath != null) return _overridePath!;
-    final dir = await getApplicationDocumentsDirectory();
-    return dir.path;
-  }
-
-  Future<File> _file(String name) async {
-    final path = await _basePath;
-    return File('$path/$name');
-  }
+  static const String _kTodos = 'todos_data';
+  static const String _kLists = 'lists_data';
+  static const String _kFilters = 'filters_data';
 
   // -----------------------------------------------------------------------
   // Todos
@@ -41,53 +20,31 @@ class PersistenceService {
 
   Future<List<Todo>> loadTodos() async {
     try {
-      final file = await _file(_todosFile);
-      if (!await file.exists()) return [];
-      final contents = await file.readAsString();
-      if (contents.trim().isEmpty) return [];
-      final decoded = jsonDecode(contents);
-      // Support both legacy array format and new object format
-      if (decoded is List) {
-        return Todo.listFromJson(decoded);
-      }
-      if (decoded is Map && decoded['todos'] is List) {
-        return Todo.listFromJson(decoded['todos'] as List<dynamic>);
-      }
-      return [];
-    } catch (_) {
-      return _recoverFromBackup();
-    }
-  }
-
-  /// Attempts to load from the recovery backup.
-  Future<List<Todo>> _recoverFromBackup() async {
-    try {
-      final file = await _file(_todosBackupFile);
-      if (!await file.exists()) return [];
-      final contents = await file.readAsString();
-      if (contents.trim().isEmpty) return [];
-      final decoded = jsonDecode(contents);
+      final prefs = await SharedPreferences.getInstance();
+      final data = prefs.getString(_kTodos);
+      if (data == null || data.isEmpty) return [];
+      
+      final decoded = jsonDecode(data);
       if (decoded is List) {
         return Todo.listFromJson(decoded);
       }
       return [];
-    } catch (_) {
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error loading todos: $e');
       return [];
     }
   }
 
   Future<void> saveTodos(List<Todo> todos) async {
-    final file = await _file(_todosFile);
-
-    // Create a recovery backup before overwriting.
-    if (await file.exists()) {
-      final bkFile = await _file(_todosBackupFile);
-      await file.copy(bkFile.path);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final data = jsonEncode(Todo.listToJson(todos));
+      await prefs.setString(_kTodos, data);
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error saving todos: $e');
     }
-
-    const encoder = JsonEncoder.withIndent('  ');
-    final content = encoder.convert(Todo.listToJson(todos));
-    await _atomicWrite(file, content);
   }
 
   // -----------------------------------------------------------------------
@@ -96,22 +53,28 @@ class PersistenceService {
 
   Future<List<TodoList>> loadLists() async {
     try {
-      final file = await _file(_listsFile);
-      if (!await file.exists()) return [];
-      final contents = await file.readAsString();
-      if (contents.trim().isEmpty) return [];
-      final decoded = jsonDecode(contents) as List<dynamic>;
+      final prefs = await SharedPreferences.getInstance();
+      final data = prefs.getString(_kLists);
+      if (data == null || data.isEmpty) return [];
+      
+      final decoded = jsonDecode(data) as List<dynamic>;
       return TodoList.listFromJson(decoded);
-    } catch (_) {
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error loading lists: $e');
       return [];
     }
   }
 
   Future<void> saveLists(List<TodoList> lists) async {
-    final file = await _file(_listsFile);
-    const encoder = JsonEncoder.withIndent('  ');
-    final content = encoder.convert(TodoList.listToJson(lists));
-    await _atomicWrite(file, content);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final data = jsonEncode(TodoList.listToJson(lists));
+      await prefs.setString(_kLists, data);
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error saving lists: $e');
+    }
   }
 
   // -----------------------------------------------------------------------
@@ -120,35 +83,27 @@ class PersistenceService {
 
   Future<List<SavedFilter>> loadSavedFilters() async {
     try {
-      final file = await _file(_filtersFile);
-      if (!await file.exists()) return [];
-      final contents = await file.readAsString();
-      if (contents.trim().isEmpty) return [];
-      final decoded = jsonDecode(contents) as List<dynamic>;
+      final prefs = await SharedPreferences.getInstance();
+      final data = prefs.getString(_kFilters);
+      if (data == null || data.isEmpty) return [];
+      
+      final decoded = jsonDecode(data) as List<dynamic>;
       return SavedFilter.listFromJson(decoded);
-    } catch (_) {
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error loading filters: $e');
       return [];
     }
   }
 
   Future<void> saveSavedFilters(List<SavedFilter> filters) async {
-    final file = await _file(_filtersFile);
-    const encoder = JsonEncoder.withIndent('  ');
-    final content = encoder.convert(SavedFilter.listToJson(filters));
-    await _atomicWrite(file, content);
-  }
-
-  // -----------------------------------------------------------------------
-  // Atomic write helper
-  // -----------------------------------------------------------------------
-
-  Future<void> _atomicWrite(File target, String content) async {
-    final dir = target.parent;
-    if (!await dir.exists()) {
-      await dir.create(recursive: true);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final data = jsonEncode(SavedFilter.listToJson(filters));
+      await prefs.setString(_kFilters, data);
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error saving filters: $e');
     }
-    final tempFile = File('${target.path}$_tempSuffix');
-    await tempFile.writeAsString(content, flush: true);
-    await tempFile.rename(target.path);
   }
 }

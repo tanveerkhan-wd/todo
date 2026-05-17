@@ -66,17 +66,21 @@ List<TodoGroup> groupTodos(List<Todo> todos, {TodoFilter? filter}) {
   switch (filter) {
     case TodoFilter.today:
       addIfNonEmpty(TodoGroupType.today, 'Today', todayList);
+      break;
     case TodoFilter.upcoming:
       addIfNonEmpty(TodoGroupType.tomorrow, 'Tomorrow', tomorrowList);
       addIfNonEmpty(TodoGroupType.upcoming, 'Upcoming', upcomingList);
+      break;
     case TodoFilter.completed:
       addIfNonEmpty(TodoGroupType.completed, 'Completed', completedList);
+      break;
     case null:
       addIfNonEmpty(TodoGroupType.today, 'Today', todayList);
       addIfNonEmpty(TodoGroupType.tomorrow, 'Tomorrow', tomorrowList);
       addIfNonEmpty(TodoGroupType.upcoming, 'Upcoming', upcomingList);
       addIfNonEmpty(TodoGroupType.noDate, 'No Date', noDateList);
       addIfNonEmpty(TodoGroupType.completed, 'Completed', completedList);
+      break;
   }
 
   return groups;

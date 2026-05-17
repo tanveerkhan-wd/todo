@@ -158,9 +158,9 @@ class _SubtaskItemState extends State<_SubtaskItem> {
       child: Row(
         children: [
           // Drag handle
-          ReorderableDragStartListener(
+          const ReorderableDragStartListener(
             index: 0,
-            child: const Icon(Icons.drag_handle, size: 20, color: Colors.grey),
+            child: Icon(Icons.drag_handle, size: 20, color: Colors.grey),
           ),
           const SizedBox(width: 4),
           // Checkbox

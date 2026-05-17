@@ -20,9 +20,10 @@ class DateHeaderDelegate extends SliverPersistentHeaderDelegate {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
+      height: 48,
       width: double.infinity,
       color: isDark ? AppTheme.surfaceDark : AppTheme.neutral,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
       child: Row(
         children: [
           Expanded(
@@ -61,10 +62,10 @@ class DateHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 40;
+  double get maxExtent => 48;
 
   @override
-  double get minExtent => 40;
+  double get minExtent => 48;
 
   @override
   bool shouldRebuild(DateHeaderDelegate oldDelegate) =>

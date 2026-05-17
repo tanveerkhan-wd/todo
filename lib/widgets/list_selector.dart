@@ -51,7 +51,7 @@ class ListSelector extends ConsumerWidget {
               onRecolor: (color) => ref
                   .read(listCollectionProvider.notifier)
                   .recolor(list.id, color),
-            )),
+            ),),
 
         const Divider(height: 24),
 
@@ -112,7 +112,7 @@ class ListSelector extends ConsumerWidget {
       builder: (ctx) => AlertDialog(
         title: const Text('Delete List'),
         content: Text(
-            'Delete "${list.name}"? Tasks in this list will not be deleted.'),
+            'Delete "${list.name}"? Tasks in this list will not be deleted.',),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),

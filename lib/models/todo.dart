@@ -201,7 +201,7 @@ class Todo {
       listId: json['listId'] as String?,
       recurrenceRule: json['recurrenceRule'] != null
           ? RecurrenceRule.fromJson(
-              json['recurrenceRule'] as Map<String, dynamic>)
+              json['recurrenceRule'] as Map<String, dynamic>,)
           : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
       reminderSet: json['reminderSet'] as bool? ?? false,

@@ -4,7 +4,7 @@ import 'package:todo_offline/models/recurrence.dart';
 void main() {
   group('RecurrenceRule model', () {
     test('create with defaults', () {
-      final rule = const RecurrenceRule(type: RecurrenceType.daily);
+      const rule = RecurrenceRule(type: RecurrenceType.daily);
       expect(rule.type, RecurrenceType.daily);
       expect(rule.interval, 1);
       expect(rule.endDate, isNull);
@@ -50,7 +50,7 @@ void main() {
     });
 
     test('copyWith updates fields', () {
-      final rule = const RecurrenceRule(type: RecurrenceType.daily);
+      const rule = RecurrenceRule(type: RecurrenceType.daily);
       final updated = rule.copyWith(type: RecurrenceType.weekly, interval: 2);
       expect(updated.type, RecurrenceType.weekly);
       expect(updated.interval, 2);
@@ -66,15 +66,15 @@ void main() {
     });
 
     test('equality', () {
-      final a = const RecurrenceRule(type: RecurrenceType.daily, interval: 1);
-      final b = const RecurrenceRule(type: RecurrenceType.daily, interval: 1);
+      const a = RecurrenceRule(type: RecurrenceType.daily, interval: 1);
+      const b = RecurrenceRule(type: RecurrenceType.daily, interval: 1);
       expect(a == b, true);
       expect(a.hashCode, b.hashCode);
     });
 
     test('inequality', () {
-      final a = const RecurrenceRule(type: RecurrenceType.daily);
-      final b = const RecurrenceRule(type: RecurrenceType.weekly);
+      const a = RecurrenceRule(type: RecurrenceType.daily);
+      const b = RecurrenceRule(type: RecurrenceType.weekly);
       expect(a == b, false);
     });
   });

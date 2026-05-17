@@ -69,7 +69,7 @@ class BackupService {
           name: entity.path.split(Platform.pathSeparator).last,
           lastModified: stat.modified,
           sizeBytes: stat.size,
-        ));
+        ),);
       }
     }
 

@@ -77,7 +77,7 @@ class AppTheme {
         brightness: Brightness.light,
       ),
       textTheme: _buildTextTheme(onSurfaceLight),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: primary,
         foregroundColor: Colors.white,
         elevation: Elevation.flat,
@@ -171,7 +171,7 @@ class AppTheme {
         brightness: Brightness.dark,
       ),
       textTheme: _buildTextTheme(Colors.white),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: primary,
         foregroundColor: Colors.white,
         elevation: Elevation.flat,
@@ -225,10 +225,10 @@ class AppTheme {
           side: BorderSide(color: borderColor, width: borderWidth),
         ),
       ),
-      dividerTheme: DividerThemeData(
+      dividerTheme: const DividerThemeData(
         space: 0,
         thickness: 1,
-        color: const Color(0xFF3A3A4E),
+        color: Color(0xFF3A3A4E),
       ),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(

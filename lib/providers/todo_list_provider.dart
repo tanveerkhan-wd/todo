@@ -18,25 +18,26 @@ final persistenceServiceProvider = Provider<PersistenceService>((ref) {
 
 /// [StateNotifier] that holds the full list of [Todo]s and persists every
 /// mutation through [PersistenceService].
-///
-/// The UI should never call [PersistenceService] directly; all mutations go
-/// through this notifier.
 class TodoListNotifier extends StateNotifier<List<Todo>> {
   final PersistenceService _persistenceService;
 
   TodoListNotifier(this._persistenceService) : super([]) {
+    // Initial load when the provider is first used.
     load();
   }
 
-  /// Loads todos from disk (called once at startup and on explicit [load]).
+  /// Loads todos from local storage.
   Future<void> load() async {
-    state = await _persistenceService.loadTodos();
+    final todos = await _persistenceService.loadTodos();
+    state = todos;
   }
 
   /// Adds [todo] to the list and persists.
   Future<void> add(Todo todo) async {
+    // Immediate state update for UI responsiveness
     state = [...state, todo];
-    await _persist();
+    // Background persistence
+    await _persistenceService.saveTodos(state);
   }
 
   /// Replaces the todo matching [updated.id] and persists.
@@ -45,19 +46,16 @@ class TodoListNotifier extends StateNotifier<List<Todo>> {
       for (final todo in state)
         if (todo.id == updated.id) updated else todo,
     ];
-    await _persist();
+    await _persistenceService.saveTodos(state);
   }
 
   /// Removes the todo with [id] and persists.
   Future<void> remove(String id) async {
     state = state.where((t) => t.id != id).toList();
-    await _persist();
+    await _persistenceService.saveTodos(state);
   }
 
   /// Toggles [isDone] for the todo with [id] and persists.
-  ///
-  /// If the todo has a [RecurrenceRule] and is being marked done, the next
-  /// occurrence is automatically created.
   Future<void> toggleComplete(String id) async {
     Todo? pendingRecurrence;
     final updated = state.map((todo) {
@@ -71,10 +69,6 @@ class TodoListNotifier extends StateNotifier<List<Todo>> {
 
     final next = pendingRecurrence;
     state = next != null ? [...updated, next] : updated;
-    await _persist();
-  }
-
-  Future<void> _persist() async {
     await _persistenceService.saveTodos(state);
   }
 }

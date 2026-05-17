@@ -36,7 +36,7 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                 name: b.name,
                 lastModified: b.lastModified,
                 sizeBytes: b.sizeBytes,
-              ))
+              ),)
           .toList();
       _isLoading = false;
     });
@@ -206,13 +206,13 @@ class _BackupPageState extends ConsumerState<BackupPage> {
                           children: [
                             IconButton(
                               icon: const FaIcon(FontAwesomeIcons.rotateLeft,
-                                  size: 16),
+                                  size: 16,),
                               tooltip: 'Restore',
                               onPressed: () => _restoreBackup(entry),
                             ),
                             IconButton(
                               icon: Icon(Icons.delete_outline,
-                                  size: 18, color: theme.colorScheme.error),
+                                  size: 18, color: theme.colorScheme.error,),
                               tooltip: 'Delete',
                               onPressed: () => _deleteBackup(entry),
                             ),

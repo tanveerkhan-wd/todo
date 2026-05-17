@@ -133,7 +133,7 @@ void main() {
   group('cancelReminder', () {
     test('cancels the notification for the given reminder', () async {
       final todo = Todo.create(
-          title: 'Test', dueDate: DateTime.now().add(const Duration(days: 1)));
+          title: 'Test', dueDate: DateTime.now().add(const Duration(days: 1)),);
       final reminder = TodoReminder.create(minutesBefore: 15);
 
       await service.cancelReminder(todo, reminder);

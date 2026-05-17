@@ -27,13 +27,13 @@ class NotificationAction {
       NotificationAction._(type: NotificationActionType.open, todoId: todoId);
 
   factory NotificationAction.complete(String todoId) => NotificationAction._(
-      type: NotificationActionType.complete, todoId: todoId);
+      type: NotificationActionType.complete, todoId: todoId,);
 
   factory NotificationAction.snooze(String todoId, int minutes) =>
       NotificationAction._(
           type: NotificationActionType.snooze,
           todoId: todoId,
-          snoozeMinutes: minutes);
+          snoozeMinutes: minutes,);
 }
 
 // ---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ class FlutterNotificationPlatform implements NotificationPlatform {
     String body,
     String payload,
   ) async {
-    final androidDetails = AndroidNotificationDetails(
+    const androidDetails = AndroidNotificationDetails(
       'todo_reminders',
       'Task Reminders',
       channelDescription: 'Reminders for your todo tasks',

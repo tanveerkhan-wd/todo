@@ -132,12 +132,12 @@ class _TaskEditorPageState extends ConsumerState<TaskEditorPage> {
     setState(() => _reminders = [
           ..._reminders,
           TodoReminder.create(minutesBefore: minutesBefore),
-        ]);
+        ],);
   }
 
   void _removeReminder(TodoReminder reminder) {
     setState(() =>
-        _reminders = _reminders.where((r) => r.id != reminder.id).toList());
+        _reminders = _reminders.where((r) => r.id != reminder.id).toList(),);
   }
 
   @override
@@ -258,7 +258,7 @@ class _TaskEditorPageState extends ConsumerState<TaskEditorPage> {
                     hint: const Text('No list'),
                     items: [
                       const DropdownMenuItem(
-                          value: null, child: Text('No list')),
+                          value: null, child: Text('No list'),),
                       ...lists.map((l) => DropdownMenuItem(
                             value: l.id,
                             child: Row(
@@ -271,7 +271,7 @@ class _TaskEditorPageState extends ConsumerState<TaskEditorPage> {
                                 Text(l.name),
                               ],
                             ),
-                          )),
+                          ),),
                     ],
                     onChanged: (v) => setState(() => _listId = v),
                   ),
@@ -286,11 +286,11 @@ class _TaskEditorPageState extends ConsumerState<TaskEditorPage> {
                 segments: const [
                   ButtonSegment(value: null, label: Text('None')),
                   ButtonSegment(
-                      value: RecurrenceType.daily, label: Text('Daily')),
+                      value: RecurrenceType.daily, label: Text('Daily'),),
                   ButtonSegment(
-                      value: RecurrenceType.weekly, label: Text('Weekly')),
+                      value: RecurrenceType.weekly, label: Text('Weekly'),),
                   ButtonSegment(
-                      value: RecurrenceType.monthly, label: Text('Monthly')),
+                      value: RecurrenceType.monthly, label: Text('Monthly'),),
                 ],
                 selected: {_recurrenceRule?.type},
                 onSelectionChanged: (v) {
@@ -317,7 +317,7 @@ class _TaskEditorPageState extends ConsumerState<TaskEditorPage> {
                         onDeleted: () => _removeTag(tag),
                         visualDensity: VisualDensity.compact,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      )),
+                      ),),
                   // Add-tag input
                   SizedBox(
                     width: 120,
@@ -352,7 +352,7 @@ class _TaskEditorPageState extends ConsumerState<TaskEditorPage> {
                         onDeleted: () => _removeReminder(r),
                         visualDensity: VisualDensity.compact,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      )),
+                      ),),
                   PopupMenuButton<int>(
                     onSelected: _addReminder,
                     tooltip: 'Add reminder',
@@ -372,7 +372,7 @@ class _TaskEditorPageState extends ConsumerState<TaskEditorPage> {
                         .map((p) => PopupMenuItem(
                               value: p.$1,
                               child: Text(p.$2),
-                            ))
+                            ),)
                         .toList(),
                   ),
                 ],

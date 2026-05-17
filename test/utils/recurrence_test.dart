@@ -7,22 +7,22 @@ void main() {
   group('nextOccurrence', () {
     test('daily returns next day', () {
       final from = DateTime(2025, 6, 1);
-      final rule = const RecurrenceRule(type: RecurrenceType.daily);
+      const rule = RecurrenceRule(type: RecurrenceType.daily);
       final next = nextOccurrence(from, rule);
       expect(next, DateTime(2025, 6, 2));
     });
 
     test('daily with interval 3', () {
       final from = DateTime(2025, 6, 1);
-      final rule =
-          const RecurrenceRule(type: RecurrenceType.daily, interval: 3);
+      const rule =
+          RecurrenceRule(type: RecurrenceType.daily, interval: 3);
       final next = nextOccurrence(from, rule);
       expect(next, DateTime(2025, 6, 4));
     });
 
     test('weekly returns 7 days later', () {
       final from = DateTime(2025, 6, 1);
-      final rule = const RecurrenceRule(type: RecurrenceType.weekly);
+      const rule = RecurrenceRule(type: RecurrenceType.weekly);
       final next = nextOccurrence(from, rule);
       expect(next, DateTime(2025, 6, 8));
     });
@@ -37,14 +37,14 @@ void main() {
 
     test('monthly returns next month same day', () {
       final from = DateTime(2025, 6, 15);
-      final rule = const RecurrenceRule(type: RecurrenceType.monthly);
+      const rule = RecurrenceRule(type: RecurrenceType.monthly);
       final next = nextOccurrence(from, rule);
       expect(next, DateTime(2025, 7, 15));
     });
 
     test('monthly handles year boundary', () {
       final from = DateTime(2025, 12, 15);
-      final rule = const RecurrenceRule(type: RecurrenceType.monthly);
+      const rule = RecurrenceRule(type: RecurrenceType.monthly);
       final next = nextOccurrence(from, rule);
       expect(next, DateTime(2026, 1, 15));
     });

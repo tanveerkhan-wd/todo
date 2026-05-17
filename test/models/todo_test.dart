@@ -199,7 +199,7 @@ void main() {
     });
 
     test('create with recurrenceRule', () {
-      final rule = RecurrenceRule(type: RecurrenceType.daily);
+      const rule = RecurrenceRule(type: RecurrenceType.daily);
       final todo = Todo.create(
         title: 'Daily task',
         recurrenceRule: rule,

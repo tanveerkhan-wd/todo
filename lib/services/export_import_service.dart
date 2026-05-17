@@ -75,7 +75,7 @@ class ExportImportService {
     if (decoded is Map && decoded['todos'] is List) {
       return Todo.listFromJson(decoded['todos'] as List<dynamic>);
     }
-    throw FormatException('Unrecognised file format');
+    throw const FormatException('Unrecognised file format');
   }
 
   /// Merges [incoming] todos into the existing store.
@@ -117,7 +117,7 @@ class ExportImportService {
           existing.any((e) => e.id == candidate.id),
         ImportDuplicateResolution.byTitleAndDate => existing.any((e) =>
             e.title == candidate.title &&
-            _sameDay(e.dueDate, candidate.dueDate)),
+            _sameDay(e.dueDate, candidate.dueDate),),
       };
 
       if (!isDuplicate) {
